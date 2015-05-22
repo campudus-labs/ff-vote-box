@@ -1,31 +1,28 @@
 import express from 'express';
 import passport from 'passport';
 import {Strategy as LocalStrategy} from 'passport-local';
+import db from './usersDb';
 
 let authRouter = express.Router();
 
-var users = [
-  {id : 1, username : 'bob', password : 'secret', email : 'bob@example.com'},
-  {id : 2, username : 'joe', password : 'birthday', email : 'joe@example.com'}
-];
-
 function findById(id, fn) {
-  var idx = id - 1;
-  if (users[idx]) {
-    fn(null, users[idx]);
+  let user = db.get(id);
+  console.log("findbyid " + user);
+  if (user) {
+    fn(null, user);
   } else {
     fn(new Error('User ' + id + ' does not exist'));
   }
 }
 
 function findByUsername(username, fn) {
-  for (var i = 0, len = users.length; i < len; i++) {
-    var user = users[i];
-    if (user.username === username) {
-      return fn(null, user);
-    }
+  let user = db.getByUsername(username);
+  console.log("findbyusername " + user);
+  if (user) {
+    return fn(null, user);
+  } else {
+    return fn(null, null);
   }
-  return fn(null, null);
 }
 
 passport.serializeUser(function (user, done) {
@@ -45,10 +42,7 @@ authRouter.get('/logout', function (req, res) {
 });
 
 authRouter.post('/login', passport.authenticate('local'), function (req, res) {
-  // If this function gets called, authentication was successful.
-  // `req.user` contains the authenticated user.
-  res.writeHead(200, {'content-type' : 'text/plain'});
-  res.end('Logged in');
+  res.end(JSON.stringify(req.user));
 });
 
 passport.use(new LocalStrategy(

@@ -1,0 +1,10 @@
+{
+  "users": [
+    {
+      "username": "bob",
+      "password": "secret",
+      "email": "bob@secret.org",
+      "id": "9d5ace46-dd15-4f78-a6b6-2c8854949771"
+    }
+  ]
+}
