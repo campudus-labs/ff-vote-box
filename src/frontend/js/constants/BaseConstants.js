@@ -1,4 +1,4 @@
-var BASE_URL = 'http://localhost:3000/';
+var BASE_URL = 'http://localhost:3000/api/';
 export default {
   BASE_URL : BASE_URL
 }

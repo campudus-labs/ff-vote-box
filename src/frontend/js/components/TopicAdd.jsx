@@ -14,18 +14,22 @@ export default class TopicAdd extends React.Component {
 
   add(e) {
     e.preventDefault();
-    console.log("add topic");
-    this.setState({
-      isAdding : true,
-      buttonTitle : 'Save'
-    });
-
-    TopicService.add(this.state.title, this.state.description);
+    if (this.state.isAdding) {
+      this.setState({
+        isAdding : false,
+        buttonTitle : 'New Topic'
+      });
+      TopicService.add(this.state.title, this.state.description);
+    } else {
+      this.setState({
+        isAdding : true,
+        buttonTitle : 'Save'
+      });
+    }
   }
 
   cancel(e) {
     e.preventDefault();
-    console.log("cancel topic");
     this.setState({
       buttonTitle : 'New Topic',
       isAdding : false,
@@ -44,9 +48,9 @@ export default class TopicAdd extends React.Component {
         <div className="inputs">
           <div className={this.state.isAdding?'input-group':'hide'}>
             <input type="text" valueLink={this.linkState('title')} required/>
-              <span className="bar"></span>
-              <label htmlFor="title">Title</label>
-            </div>
+            <span className="bar"></span>
+            <label htmlFor="title">Title</label>
+          </div>
 
           <div className={this.state.isAdding?'':'hide'}>
             <label htmlFor="description">Description</label>
