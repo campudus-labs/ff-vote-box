@@ -12,8 +12,12 @@ var browserify = require('browserify');
 var babelify = require('babelify');
 var reactify = require('reactify');
 var source = require('vinyl-source-stream');
+var babel = require('gulp-babel');
+var concat = require('gulp-concat');
+var sourcemaps = require('gulp-sourcemaps');
 var url = require('url');
 var proxy = require('proxy-middleware');
+var nodemon = require('gulp-nodemon');
 
 gulp.task('sass', sassCompile);
 gulp.task('assets', assetCopy);
@@ -21,7 +25,8 @@ gulp.task('scripts', scriptCompile);
 gulp.task('clean', clean);
 
 gulp.task('frontendReload', ['build'], reload);
-gulp.task('dev', ['build'], frontendServer);
+gulp.task('dev', ['build'], watchServers);
+gulp.task('dev:back', ['build'], backendServer);
 gulp.task('test', ['build'], test);
 gulp.task('testWatch', ['build'], testWatch);
 
@@ -50,25 +55,26 @@ function sassCompile() {
 }
 
 function scriptCompile() {
-  return compiledEs6('./src/frontend/js/app.js', 'app.js', './dist/frontend/js');
-}
-
-function serverScripts() {
-  return compiledEs6('./src/server/js/app.js', 'app.js', './dist/server/');
-}
-
-function compiledEs6(inFile, outFile, outDir) {
   return browserify()
     .transform(babelify)
     .transform(reactify)
-    .add(inFile)
+    .add('./src/frontend/js/app.js')
     .bundle()
     .on('error', function (err) {
       console.log('error', err);
       this.emit('end');
     })
-    .pipe(source(outFile))
-    .pipe(gulp.dest(outDir));
+    .pipe(source('app.js'))
+    .pipe(gulp.dest('./dist/frontend/js'));
+}
+
+function serverScripts() {
+  return gulp.src('src/server/**/*.js')
+    .pipe(sourcemaps.init())
+    .pipe(concat('app.js'))
+    .pipe(babel())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('dist/server'));
 }
 
 function assetCopy() {
@@ -96,6 +102,17 @@ function testWatch(done) {
   }, done);
 }
 
+function watchServers() {
+  frontendServer();
+  backendServer();
+}
+
+function backendServer() {
+  nodemon({
+    script : './dist/server/app.js'
+  });
+}
+
 function frontendServer() {
   var proxyOptions = url.parse('http://localhost:8181/');
   proxyOptions.route = '/api';
@@ -104,10 +121,12 @@ function frontendServer() {
     server : {
       baseDir : 'dist/frontend',
       middleware : [proxy(proxyOptions)]
-    }
+    },
+    open : false
   });
 
   gulp.watch(['src/frontend/**', 'src/frontend/js/**', 'src/frontend/scss/**/*.scss'], {}, ['frontendReload']);
+  gulp.watch(['src/server/**'], {}, ['build:server']);
 
   //gulp.src('src/test/**/*Spec.js').pipe(karma({
   //  configFile : 'karma.conf.js',
@@ -116,5 +135,5 @@ function frontendServer() {
 }
 
 function clean(cb) {
-  del(['dist/'], cb);
+  del(['./dist/'], cb);
 }
