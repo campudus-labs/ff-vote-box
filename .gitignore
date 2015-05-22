@@ -30,3 +30,7 @@ node_modules
 .idea/
 dist/
 .sass-cache/
+
+db.json
+users.json
+~*.json
