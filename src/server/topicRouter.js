@@ -1,39 +1,28 @@
 import express from 'express';
+import db from './topicsDb';
 
 let topicRouter = express.Router();
 
 topicRouter.get('/topics', function (req, res) {
-  res.send({topics : []});
+  res.send({topics : db.getTopics()});
 });
 
 topicRouter.post('/topics', function (req, res) {
-  var topic = {
-    id : (++topicIdCounter),
-    title : req.body.title,
-    description : req.body.description
-  };
+  let topic = db.createTopic(req.body.title, req.body.description);
 
-  res.send('got some topic:' + JSON.stringify(topic));
+  res.send(topic);
 });
 
 topicRouter.get('/topics/:id', function (req, res) {
-  var topic = {
-    id : req.params.id,
-    title : 'no',
-    description: 'nope'
-  };
+  var topic = db.getTopic(req.params.id);
 
   res.send(topic);
 });
 
 topicRouter.put('/topics/:id', function (req, res) {
-  var topic = {
-    id : req.params.id,
-    title : req.body.title,
-    description : req.body.description
-  };
+  let topic = db.updateTopic(req.params.id, req.body.title, req.body.description);
 
-  res.send('update some topic:' + JSON.stringify(topic));
+  res.send(topic);
 });
 
 topicRouter.delete('/topics/:id', function (req, res) {

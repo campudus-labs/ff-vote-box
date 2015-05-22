@@ -64,6 +64,7 @@
     "lodash": "^3.9.1",
     "lowdb": "^0.7.3",
     "passport": "^0.2.2",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "underscore-db": "^0.8.1"
   }
 }
