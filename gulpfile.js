@@ -56,16 +56,16 @@ function sassCompile() {
 }
 
 function scriptCompile() {
-  return browserify('./src/frontend/js/app.js', {debug : true})
+  return browserify('./src/frontend/js/app.jsx', {debug : true})
     .transform(babelify)
     .transform(reactify)
-    .require('./src/frontend/js/app.js', {entry : true})
+    .require('./src/frontend/js/app.jsx', {entry : true})
     .bundle()
     .on('error', function (err) {
       console.log('error', err);
       this.emit('end');
     })
-    .pipe(source('app.js'))
+    .pipe(source('app.jsx'))
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps : true}))
     .pipe(sourcemaps.write('.', {sourceRoot : __dirname}))
