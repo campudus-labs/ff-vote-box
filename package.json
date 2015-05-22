@@ -46,8 +46,6 @@
     "karma-browserify": "^4.2.1",
     "karma-chrome-launcher": "^0.1.12",
     "karma-jasmine": "^0.3.5",
-    "lodash": "^3.9.1",
-    "lowdb": "^0.7.3",
     "proxy-middleware": "^0.11.1",
     "react": "^0.13.3",
     "react-mixin": "^1.2.2",
