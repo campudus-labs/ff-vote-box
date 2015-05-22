@@ -1,6 +1,7 @@
 import React from 'react';
 import AuthenticatedComponent from './AuthenticatedComponent.jsx'
 import Topics from './Topics.jsx';
+import TopicAdd from './TopicAdd.jsx';
 import TopicsService from '../services/TopicService.js';
 import TopicStore from '../stores/TopicStore.js';
 
@@ -31,7 +32,10 @@ export default AuthenticatedComponent(class Home extends React.Component {
 
   render() {
     return (
-      <Topics topics={this.state.topics}/>
+      <div>
+        <TopicAdd />
+        <Topics topics={this.state.topics}/>
+      </div>
     );
   }
 });

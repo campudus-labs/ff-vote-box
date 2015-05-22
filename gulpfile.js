@@ -65,7 +65,7 @@ function scriptCompile() {
       console.log('error', err);
       this.emit('end');
     })
-    .pipe(source('app.jsx'))
+    .pipe(source('app.js'))
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps : true}))
     .pipe(sourcemaps.write('.', {sourceRoot : __dirname}))

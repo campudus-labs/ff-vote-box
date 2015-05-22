@@ -6,7 +6,7 @@ import TopicActions from '../actions/TopicActions';
 class TopicService {
 
   getTopics() {
-    /*handleTopicsResult(when(request({
+    /*this.handleTopicsResult(when(request({
      url : TOPICS_URL,
      method : 'GET',
      crossOrigin : true
@@ -15,17 +15,45 @@ class TopicService {
     this.handleTopicsResult(when({
       topics : [
         {
+          id : 1,
           title : "topic 1",
           description : "description of topic 1"
         },
         {
+          id : 2,
           title : "topic 2",
           description : "description of topic 2"
         }, {
+          id : 3,
           title : "topic 3",
           description : "description of topic 3"
         }]
     }));
+  }
+
+  add(title, description) {
+    /*this.handleTopicAddResult(when(request({
+     url : TOPICS_URL,
+     method : 'POST'
+     crossOrigin : true,
+     type : 'json',
+     data : {
+     title, description
+     }
+     })));*/
+
+    this.handleTopicAddResult(when({
+      id : 4,
+      title : title,
+      description : description
+    }));
+  }
+
+  handleTopicAddResult(addTopicPromise) {
+    return addTopicPromise
+      .then(function (response) {
+        TopicActions.addTopic(response);
+      });
   }
 
   handleTopicsResult(topicsPromise) {
