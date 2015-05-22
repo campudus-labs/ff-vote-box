@@ -13,6 +13,7 @@ var babelify = require('babelify');
 var reactify = require('reactify');
 var source = require('vinyl-source-stream');
 var babel = require('gulp-babel');
+var buffer = require('vinyl-buffer');
 var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 var url = require('url');
@@ -55,25 +56,33 @@ function sassCompile() {
 }
 
 function scriptCompile() {
-  return browserify()
+  return browserify('./src/frontend/js/app.js', {debug : true})
     .transform(babelify)
     .transform(reactify)
-    .add('./src/frontend/js/app.js')
+    .require('./src/frontend/js/app.js', {entry : true})
     .bundle()
     .on('error', function (err) {
       console.log('error', err);
       this.emit('end');
     })
     .pipe(source('app.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps : true}))
+    .pipe(sourcemaps.write('.', {sourceRoot : __dirname}))
     .pipe(gulp.dest('./dist/frontend/js'));
 }
 
 function serverScripts() {
   return gulp.src('src/server/**/*.js')
+    .pipe(plumber({
+      errorHandler : function (error) {
+        console.log(error.message);
+        this.emit('end');
+      }
+    }))
     .pipe(sourcemaps.init())
-    .pipe(concat('app.js'))
     .pipe(babel())
-    .pipe(sourcemaps.write('.'))
+    .pipe(sourcemaps.write('.', {sourceRoot : __dirname}))
     .pipe(gulp.dest('dist/server'));
 }
 
@@ -108,6 +117,8 @@ function watchServers() {
 }
 
 function backendServer() {
+  gulp.watch(['src/server/**'], {}, ['build:server']);
+
   nodemon({
     script : './dist/server/app.js'
   });
@@ -126,7 +137,6 @@ function frontendServer() {
   });
 
   gulp.watch(['src/frontend/**', 'src/frontend/js/**', 'src/frontend/scss/**/*.scss'], {}, ['frontendReload']);
-  gulp.watch(['src/server/**'], {}, ['build:server']);
 
   //gulp.src('src/test/**/*Spec.js').pipe(karma({
   //  configFile : 'karma.conf.js',
