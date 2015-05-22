@@ -1,0 +1,51 @@
+{
+  "name": "VoteBox",
+  "version": "1.0.0",
+  "description": "Vote for things",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/campudus/ff-vote-box.git"
+  },
+  "keywords": [
+    "vote",
+    "voting",
+    "fun",
+    "friday",
+    "es6",
+    "react",
+    "lowdb"
+  ],
+  "author": "Campudus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/campudus/ff-vote-box/issues"
+  },
+  "homepage": "https://github.com/campudus/ff-vote-box",
+  "devDependencies": {
+    "babelify": "^6.1.1",
+    "browser-sync": "^2.7.3",
+    "browserify": "^10.2.1",
+    "del": "^1.2.0",
+    "gulp": "^3.8.11",
+    "gulp-babel": "^5.1.0",
+    "gulp-compass": "^2.1.0",
+    "gulp-minify-css": "^1.1.1",
+    "gulp-plumber": "^1.0.1",
+    "gulp-util": "^3.0.4",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.12.32",
+    "karma-browserify": "^4.2.1",
+    "karma-chrome-launcher": "^0.1.12",
+    "karma-jasmine": "^0.3.5",
+    "lodash": "^3.9.1",
+    "lowdb": "^0.7.3",
+    "proxy-middleware": "^0.11.1",
+    "react": "^0.13.3",
+    "reactify": "^1.1.1",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
