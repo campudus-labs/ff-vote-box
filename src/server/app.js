@@ -91,13 +91,4 @@ app.delete('/topics/:topicId/ideas/:id', function (req, res) {
   res.send('delete some idea:' + ideaId);
 });
 
-app.post('/login', function (req, res) {
-  var credentials = {
-    username : req.body.username,
-    password : req.body.password
-  };
-
-  res.send('got some login:' + JSON.stringify(credentials));
-});
-
 app.listen(8181);
