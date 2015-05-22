@@ -1,41 +1,42 @@
 import express from 'express';
 import db from './topicsDb';
+import {loggedIn} from './helpers';
 
 let topicRouter = express.Router();
 
-topicRouter.get('/topics', function (req, res) {
+topicRouter.get('/topics', loggedIn, function (req, res) {
   res.send({topics : db.getTopics()});
 });
 
-topicRouter.post('/topics', function (req, res) {
+topicRouter.post('/topics', loggedIn, function (req, res) {
   let topic = db.createTopic(req.body.title, req.body.description);
 
   res.send(topic);
 });
 
-topicRouter.get('/topics/:id', function (req, res) {
+topicRouter.get('/topics/:id', loggedIn, function (req, res) {
   var topic = db.getTopic(req.params.id);
 
   res.send(topic);
 });
 
-topicRouter.put('/topics/:id', function (req, res) {
+topicRouter.put('/topics/:id', loggedIn, function (req, res) {
   let topic = db.updateTopic(req.params.id, req.body.title, req.body.description);
 
   res.send(topic);
 });
 
-topicRouter.delete('/topics/:id', function (req, res) {
+topicRouter.delete('/topics/:id', loggedIn, function (req, res) {
   let topic = db.deleteTopic(req.params.id);
 
   res.send(topic);
 });
 
-topicRouter.get('/topics/:topicId/ideas', function (req, res) {
+topicRouter.get('/topics/:topicId/ideas', loggedIn, function (req, res) {
   res.send({ideas : []});
 });
 
-topicRouter.post('/topics/:topicId/ideas', function (req, res) {
+topicRouter.post('/topics/:topicId/ideas', loggedIn, function (req, res) {
   var idea = {
     id : (++ideaIdCounter),
     title : req.body.title,
@@ -46,7 +47,7 @@ topicRouter.post('/topics/:topicId/ideas', function (req, res) {
   res.send('got some idea:' + JSON.stringify(idea));
 });
 
-topicRouter.get('/topics/:topicId/ideas/:id', function (req, res) {
+topicRouter.get('/topics/:topicId/ideas/:id', loggedIn, function (req, res) {
   var idea = {
     id : req.params.id,
     title : 'no',
@@ -57,7 +58,7 @@ topicRouter.get('/topics/:topicId/ideas/:id', function (req, res) {
   res.send(idea);
 });
 
-topicRouter.put('/topics/:topicId/ideas/:id', function (req, res) {
+topicRouter.put('/topics/:topicId/ideas/:id', loggedIn, function (req, res) {
   var idea = {
     id : req.params.id,
     title : req.body.title,
@@ -68,7 +69,7 @@ topicRouter.put('/topics/:topicId/ideas/:id', function (req, res) {
   res.send('update some idea:' + JSON.stringify(idea));
 });
 
-topicRouter.delete('/topics/:topicId/ideas/:id', function (req, res) {
+topicRouter.delete('/topics/:topicId/ideas/:id', loggedIn, function (req, res) {
   var ideaId = req.params.id;
 
   res.send('delete some idea:' + ideaId);

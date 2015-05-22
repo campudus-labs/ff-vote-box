@@ -7,7 +7,6 @@ let authRouter = express.Router();
 
 function findById(id, fn) {
   let user = db.get(id);
-  console.log("findbyid " + user);
   if (user) {
     fn(null, user);
   } else {
@@ -17,7 +16,6 @@ function findById(id, fn) {
 
 function findByUsername(username, fn) {
   let user = db.getByUsername(username);
-  console.log("findbyusername " + user);
   if (user) {
     return fn(null, user);
   } else {
