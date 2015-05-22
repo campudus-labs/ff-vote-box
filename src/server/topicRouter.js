@@ -26,9 +26,9 @@ topicRouter.put('/topics/:id', function (req, res) {
 });
 
 topicRouter.delete('/topics/:id', function (req, res) {
-  var topicId = req.params.id;
+  let topic = db.deleteTopic(req.params.id);
 
-  res.send('delete some topic:' + topicId);
+  res.send(topic);
 });
 
 topicRouter.get('/topics/:topicId/ideas', function (req, res) {

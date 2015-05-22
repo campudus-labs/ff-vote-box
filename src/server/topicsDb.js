@@ -6,7 +6,7 @@ low.mixin(underscoreDb);
 let db = low('db.json');
 
 function getAllTopics() {
-  return db('topics');
+  return db('topics').value();
 }
 
 function getTopic(id) {
@@ -35,9 +35,17 @@ function updateTopic(id, title, description) {
     .value();
 }
 
+function deleteTopic(id) {
+  let x = db('topics').find({id: id});
+  let r = db('topics').remove(x);
+
+  return r;
+}
+
 export default {
   getTopics : getAllTopics,
   getTopic : getTopic,
   updateTopic : updateTopic,
-  createTopic : createTopic
+  createTopic : createTopic,
+  deleteTopic : deleteTopic
 }
