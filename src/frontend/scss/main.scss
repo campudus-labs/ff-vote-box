@@ -1,7 +1,138 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial;
+  font-family: $fontFamily;
+  font-size: $fontSize;
 }
 
 .hide {
-  display: none;
+  display: none !important;
+}
+
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+h1.title {
+
+}
+
+.main {
+  margin: 30px 50px;
+}
+
+.navbar {
+  ul {
+    list-style: none;
+    margin: 0 0 30px 0;
+    padding: 0;
+
+    li {
+      display: inline-block;
+      margin-right: 20px;
+      text-transform: uppercase;
+
+      a {
+        text-decoration: none;
+        color: $navLinkColor;
+      }
+    }
+  }
+}
+
+button {
+  -webkit-appearance: none;
+  cursor: default;
+  outline: none;
+  border: none;
+  padding: 10px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background-color: $buttonBackgroundColor;
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: 0.2s;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+
+  &:active {
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
+    transition-delay: 0s;
+    color: #FFFFFF;
+    background-color: $buttonActiveBackgroundColor;
+  }
+
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 45px;
+
+  input {
+    font-size: $fontSize;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 300px;
+    border: none;
+    border-bottom: 1px solid #757575;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  label {
+    color: $inputColor;
+    font-size: $fontSize;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+  }
+
+  input:focus ~ label, input:valid ~ label {
+    top: -20px;
+    font-size: 14px;
+    color: $navLinkColor;
+  }
+
+  .bar {
+    position: relative;
+    display: block;
+    width: 300px;
+  }
+
+  .bar:before, .bar:after {
+    content: '';
+    height: 2px;
+    width: 0;
+    bottom: 1px;
+    position: absolute;
+    background: $navLinkColor;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+  }
+
+  .bar:before {
+    left: 50%;
+  }
+
+  .bar:after {
+    right: 50%;
+  }
+
+  input:focus ~ .bar:before, input:focus ~ .bar:after {
+    width: 50%;
+  }
+
 }

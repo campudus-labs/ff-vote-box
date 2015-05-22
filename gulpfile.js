@@ -25,7 +25,7 @@ gulp.task('assets', assetCopy);
 gulp.task('scripts', scriptCompile);
 gulp.task('clean', clean);
 
-gulp.task('frontendReload', ['build'], reload);
+gulp.task('frontendReload', ['build:frontend'], reload);
 gulp.task('dev', ['build'], watchServers);
 gulp.task('dev:back', ['build'], backendServer);
 gulp.task('test', ['build'], test);
@@ -38,7 +38,7 @@ gulp.task('default', ['build']);
 
 
 function sassCompile() {
-  return gulp.src('src/frontend/scss/main.scss')
+  return gulp.src('src/frontend/scss/style.scss')
     .pipe(plumber({
       errorHandler : function (error) {
         console.log(error.message);
@@ -120,7 +120,8 @@ function backendServer() {
   gulp.watch(['src/server/**'], {}, ['build:server']);
 
   nodemon({
-    script : './dist/server/app.js'
+    script : './dist/server/app.js',
+    watch : './dist/server/app.js'
   });
 }
 
