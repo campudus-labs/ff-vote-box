@@ -14,8 +14,12 @@ class UserModel {
     return db('users').find({id : id});
   }
 
+  static remove(id) {
+    db('users').remove(id);
+  }
+
   static getByUsername(username) {
-    return db('users').find({ username: username });
+    return db('users').find({username : username});
   }
 
   static create(username, password, email) {
