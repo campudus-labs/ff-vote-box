@@ -36,17 +36,22 @@ export default class TopicAdd extends React.Component {
 
   render() {
     return (
-      <div className="topic">
-        <button className="add-button" onClick={this.add.bind(this)}>{this.state.buttonTitle}</button>
-        <button className={this.state.isAdding?'':'hide'} onClick={this.cancel.bind(this)}>Cancel</button>
-        <div className={this.state.isAdding?'':'hide'}>
-          <label htmlFor="title">Title</label>
-          <input type="text" valueLink={this.linkState('title')} className="form-control" id="title"
-                 placeholder="Title"/>
+      <div className="topic-add clearfix">
+        <div className="actions">
+          <button className="add-button" onClick={this.add.bind(this)}>{this.state.buttonTitle}</button>
+          <button className={this.state.isAdding?'':'hide'} onClick={this.cancel.bind(this)}>Cancel</button>
         </div>
-        <div className={this.state.isAdding?'':'hide'}>
-          <label htmlFor="description">Description</label>
-          <textarea name="description" valueLink={this.linkState('description')} className=""/>
+        <div className="inputs">
+          <div className={this.state.isAdding?'input-group':'hide'}>
+            <input type="text" valueLink={this.linkState('title')} required/>
+              <span className="bar"></span>
+              <label htmlFor="title">Title</label>
+            </div>
+
+          <div className={this.state.isAdding?'':'hide'}>
+            <label htmlFor="description">Description</label>
+            <textarea name="description" valueLink={this.linkState('description')} className=""/>
+          </div>
         </div>
       </div>
     );
