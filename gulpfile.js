@@ -20,25 +20,28 @@ var url = require('url');
 var proxy = require('proxy-middleware');
 var nodemon = require('gulp-nodemon');
 var jasmine = require('gulp-jasmine');
-var cover = require('gulp-coverage');
 
 gulp.task('sass', sassCompile);
 gulp.task('assets', assetCopy);
 gulp.task('scripts', scriptCompile);
 gulp.task('clean', clean);
 
-gulp.task('frontendReload', ['build:frontend'], reload);
-gulp.task('dev', ['build'], watchServers);
-gulp.task('dev:back', ['build'], backendServer);
-gulp.task('test', ['build'], testFrontend);
-gulp.task('testWatch', ['build'], testFrontendWatch);
-
-gulp.task('test:back:compile', ['build'], testBackendCompile);
-gulp.task('test:back', ['test:back:compile'], testBackendWatch);
-
 gulp.task('build:frontend', ['sass', 'assets', 'scripts']);
 gulp.task('build:server', serverScripts);
 gulp.task('build', ['build:frontend', 'build:server']);
+
+gulp.task('reload:frontend', ['build:frontend'], reload);
+gulp.task('dev', ['build'], watchServers);
+gulp.task('dev:server', ['build:server'], backendServer);
+
+gulp.task('test:frontend', ['build'], testFrontend);
+gulp.task('test:frontend:watch', ['build'], testFrontendWatch);
+gulp.task('test:server:compile', ['build:server'], testBackendCompile);
+gulp.task('test:server', ['test:server:compile'], testServer);
+gulp.task('test:server:watch', ['build:server'], testBackendWatch);
+
+gulp.task('test', ['test:server:watch', 'test:frontend']);
+
 gulp.task('default', ['build']);
 
 
@@ -107,6 +110,9 @@ function testFrontend(done) {
 }
 
 function testFrontendWatch(done) {
+  gulp.watch(['src/frontend/**'], {}, ['build:frontend']);
+  gulp.watch(['src/server/**'], {}, ['build:server']);
+
   karma.start({
     configFile : __dirname + '/karma.conf.js',
     action : 'watch',
@@ -122,9 +128,13 @@ function testBackendCompile() {
     .pipe(gulp.dest('dist/test-server'));
 }
 
-function testBackendWatch() {
+function testServer() {
   return gulp.src('dist/test-server/**/*Spec.js')
     .pipe(jasmine());
+}
+
+function testBackendWatch() {
+  gulp.watch(['src/server/**', 'src/test/server/**'], {}, ['test:server']);
 }
 
 function watchServers() {
@@ -133,7 +143,7 @@ function watchServers() {
 }
 
 function backendServer() {
-  gulp.watch(['src/server/**'], {}, ['build:server']);
+  gulp.watch(['src/server/**', 'src/test/server/**'], {}, ['build:server']);
 
   nodemon({
     script : './dist/server/app.js',
@@ -153,12 +163,7 @@ function frontendServer() {
     open : false
   });
 
-  gulp.watch(['src/frontend/**', 'src/frontend/js/**', 'src/frontend/scss/**/*.scss'], {}, ['frontendReload']);
-
-  //gulp.src('src/test/**/*Spec.js').pipe(karma({
-  //  configFile : 'karma.conf.js',
-  //  action : 'watch'
-  //}));
+  gulp.watch(['src/frontend/**', 'src/frontend/js/**', 'src/frontend/scss/**/*.scss'], {}, ['reload:frontend']);
 }
 
 function clean(cb) {
