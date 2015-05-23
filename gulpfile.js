@@ -19,6 +19,8 @@ var sourcemaps = require('gulp-sourcemaps');
 var url = require('url');
 var proxy = require('proxy-middleware');
 var nodemon = require('gulp-nodemon');
+var jasmine = require('gulp-jasmine');
+var cover = require('gulp-coverage');
 
 gulp.task('sass', sassCompile);
 gulp.task('assets', assetCopy);
@@ -28,8 +30,11 @@ gulp.task('clean', clean);
 gulp.task('frontendReload', ['build:frontend'], reload);
 gulp.task('dev', ['build'], watchServers);
 gulp.task('dev:back', ['build'], backendServer);
-gulp.task('test', ['build'], test);
-gulp.task('testWatch', ['build'], testWatch);
+gulp.task('test', ['build'], testFrontend);
+gulp.task('testWatch', ['build'], testFrontendWatch);
+
+gulp.task('test:back:compile', ['build'], testBackendCompile);
+gulp.task('test:back', ['test:back:compile'], testBackendWatch);
 
 gulp.task('build:frontend', ['sass', 'assets', 'scripts']);
 gulp.task('build:server', serverScripts);
@@ -91,7 +96,7 @@ function assetCopy() {
     .pipe(gulp.dest('dist/frontend/'));
 }
 
-function test(done) {
+function testFrontend(done) {
   karma.start({
     configFile : __dirname + '/karma.conf.js',
     action : 'run',
@@ -101,7 +106,7 @@ function test(done) {
   }, done);
 }
 
-function testWatch(done) {
+function testFrontendWatch(done) {
   karma.start({
     configFile : __dirname + '/karma.conf.js',
     action : 'watch',
@@ -109,6 +114,17 @@ function testWatch(done) {
       '/api' : 'http://localhost:8181'
     }
   }, done);
+}
+
+function testBackendCompile() {
+  return gulp.src('src/test/server/**')
+    .pipe(babel())
+    .pipe(gulp.dest('dist/test-server'));
+}
+
+function testBackendWatch() {
+  return gulp.src('dist/test-server/**/*Spec.js')
+    .pipe(jasmine());
 }
 
 function watchServers() {

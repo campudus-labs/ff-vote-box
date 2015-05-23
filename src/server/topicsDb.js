@@ -1,5 +1,6 @@
 import low from 'lowdb';
 import underscoreDb from 'underscore-db';
+import _ from 'lodash';
 
 low.mixin(underscoreDb);
 
@@ -36,10 +37,7 @@ function updateTopic(id, title, description) {
 }
 
 function deleteTopic(id) {
-  let x = db('topics').find({id: id});
-  let r = db('topics').remove(x);
-
-  return r;
+  return db('topics').remove(id);
 }
 
 export default {
