@@ -1,50 +1,97 @@
-import config from './config';
 import low from 'lowdb';
 import underscoreDb from 'underscore-db';
 import _ from 'lodash';
+import config from './config';
 
 low.mixin(underscoreDb);
 
-let db = low(config.topicsDb);
+export default class Database {
+  constructor(dbName, options) {
+    if (!dbName) {
+      dbName = config.topicsDb;
+    }
+    this.db = low(dbName, options);
+  }
 
-function getAllTopics() {
-  return db('topics').value();
-}
+  createTopic(title, description) {
+    let topic = {
+      title : title,
+      description : description
+    };
 
-function getTopic(id) {
-  return db('topics').find({id : id});
-}
+    return this.db('topics').insert(topic);
+  }
 
-function createTopic(title, description) {
-  let topic = {
-    title : title,
-    description : description
-  };
+  getTopic(id) {
+    return this.db('topics').find({id : id});
+  }
 
-  return db('topics').insert(topic);
-}
+  getTopics() {
+    return this.db('topics').value();
+  }
 
-function updateTopic(id, title, description) {
-  let topic = {
-    title : title,
-    description : description
-  };
+  updateTopic(id, title, description) {
+    let topic = {
+      title : title,
+      description : description
+    };
 
-  return db('topics')
-    .chain()
-    .find({id : id})
-    .assign(topic)
-    .value();
-}
+    return this.db('topics')
+      .chain()
+      .find({id : id})
+      .assign(topic)
+      .value();
+  }
 
-function deleteTopic(id) {
-  return db('topics').remove(id);
-}
+  deleteTopic(id) {
+    return this.db('topics').remove(id);
+  }
 
-export default {
-  getTopics : getAllTopics,
-  getTopic : getTopic,
-  updateTopic : updateTopic,
-  createTopic : createTopic,
-  deleteTopic : deleteTopic
+  createIdea(topicId, title, description) {
+    let idea = {
+      topicId : topicId,
+      title : title,
+      description : description,
+      votes : 0
+    };
+
+    idea = this.db('ideas').insert(idea);
+    return idea;
+  }
+
+  getIdeas(topicId) {
+    return this.db('ideas').where({topicId : topicId});
+  }
+
+  getIdea(id) {
+    return this.db('ideas').find({id : id});
+  }
+
+  updateIdea(id, title, description) {
+    let idea = {
+      title : title,
+      description : description
+    };
+
+    return this.db('ideas')
+      .chain()
+      .find({id : id})
+      .assign(idea)
+      .value();
+  }
+
+  deleteIdea(id) {
+    return this.db('ideas').remove(id);
+  }
+
+  voteIdea(id) {
+    return this.db('ideas')
+      .chain()
+      .where({id : id})
+      .map((i) => {
+        i.votes = i.votes + 1;
+        return i;
+      })
+      .value();
+  }
 }

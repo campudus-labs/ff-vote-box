@@ -1,9 +1,11 @@
 import express from 'express';
-import db from './topicsDb';
+import config from './config';
+import Database from './topicsDb';
 import {loggedIn} from './helpers';
 
 let topicRouter = express.Router();
 //topicRouter.use(loggedIn);
+let db = new Database();
 
 topicRouter.get('/topics', function (req, res) {
   res.send({topics : db.getTopics()});
@@ -34,46 +36,39 @@ topicRouter.delete('/topics/:id', function (req, res) {
 });
 
 topicRouter.get('/topics/:topicId/ideas', function (req, res) {
-  res.send({ideas : []});
+  let ideas = db.getIdeas(req.params.topicId);
+
+  res.send({ideas : ideas});
 });
 
 topicRouter.post('/topics/:topicId/ideas', function (req, res) {
-  var idea = {
-    id : (++ideaIdCounter),
-    title : req.body.title,
-    description : req.body.description,
-    votes : req.body.votes
-  };
+  let idea = db.createIdea(req.params.topicId, req.body.title, req.body.description);
 
   res.send('got some idea:' + JSON.stringify(idea));
 });
 
 topicRouter.get('/topics/:topicId/ideas/:id', function (req, res) {
-  var idea = {
-    id : req.params.id,
-    title : 'no',
-    description : 'nope',
-    votes : 0
-  };
+  var idea = db.getIdea(req.params.id);
 
   res.send(idea);
 });
 
 topicRouter.put('/topics/:topicId/ideas/:id', function (req, res) {
-  var idea = {
-    id : req.params.id,
-    title : req.body.title,
-    description : req.body.description,
-    votes : req.body.votes
-  };
+  let updated = db.updateIdea(req.params.id, req.body.title, req.body.description);
 
-  res.send('update some idea:' + JSON.stringify(idea));
+  res.send(updated);
+});
+
+topicRouter.post('/topics/:topicId/ideas/:id/votes', function (req, res) {
+  let idea = db.voteIdea(req.params.id);
+
+  res.send(idea);
 });
 
 topicRouter.delete('/topics/:topicId/ideas/:id', function (req, res) {
-  var ideaId = req.params.id;
+  let idea = db.deleteIdea(req.params.id);
 
-  res.send('delete some idea:' + ideaId);
+  res.send(idea);
 });
 
 export default topicRouter;
