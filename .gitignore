@@ -34,3 +34,4 @@ dist/
 db.json
 users.json
 .~*.json
+db-*.json

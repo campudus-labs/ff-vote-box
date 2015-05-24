@@ -1,10 +1,11 @@
+import config from './config';
 import low from 'lowdb';
 import underscoreDb from 'underscore-db';
 import _ from 'lodash';
 
 low.mixin(underscoreDb);
 
-let db = low('db.json');
+let db = low(config.topicsDb);
 
 function getAllTopics() {
   return db('topics').value();
