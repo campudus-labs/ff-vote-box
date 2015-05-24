@@ -4,7 +4,7 @@ import Database from './topicsDb';
 import {loggedIn} from './helpers';
 
 let topicRouter = express.Router();
-//topicRouter.use(loggedIn);
+topicRouter.use(loggedIn);
 let db = new Database();
 
 topicRouter.get('/topics', function (req, res) {
