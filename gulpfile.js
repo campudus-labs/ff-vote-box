@@ -38,7 +38,7 @@ gulp.task('test:frontend', ['build'], testFrontend);
 gulp.task('test:frontend:watch', ['build'], testFrontendWatch);
 gulp.task('test:server:compile', ['build:server'], testBackendCompile);
 gulp.task('test:server', ['test:server:compile'], testServer);
-gulp.task('test:server:watch', ['build:server'], testBackendWatch);
+gulp.task('test:server:watch', ['test:server'], testBackendWatch);
 
 gulp.task('test', ['test:server:watch', 'test:frontend']);
 
