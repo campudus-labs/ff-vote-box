@@ -103,8 +103,8 @@ function assetCopy() {
 function testFrontend(done) {
   karma.start({
     configFile : __dirname + '/karma.conf.js',
-    autoWatch: false,
-    singleRun: true,
+    autoWatch : false,
+    singleRun : true,
     proxies : {
       '/api' : 'http://localhost:8181'
     }
@@ -117,8 +117,8 @@ function testFrontendWatch(done) {
 
   karma.start({
     configFile : __dirname + '/karma.conf.js',
-    autoWatch: true,
-    singleRun: false,
+    autoWatch : true,
+    singleRun : false,
     proxies : {
       '/api' : 'http://localhost:8181'
     }
@@ -127,12 +127,24 @@ function testFrontendWatch(done) {
 
 function testBackendCompile() {
   return gulp.src('src/test/server/**')
+    .pipe(plumber({
+      errorHandler : function (error) {
+        console.log(error.message);
+        this.emit('end');
+      }
+    }))
     .pipe(babel())
     .pipe(gulp.dest('dist/test-server'));
 }
 
 function testServer() {
   return gulp.src('dist/test-server/**/*Spec.js')
+    .pipe(plumber({
+      errorHandler : function (error) {
+        console.log(error.message);
+        this.emit('end');
+      }
+    }))
     .pipe(jasmine());
 }
 
