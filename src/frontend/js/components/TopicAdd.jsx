@@ -1,5 +1,5 @@
 import React from 'react/addons';
-import ReactMixin from 'react-mixin';
+import reactMixin from 'react-mixin';
 import TopicService from '../services/TopicService.js'
 
 export default class TopicAdd extends React.Component {
