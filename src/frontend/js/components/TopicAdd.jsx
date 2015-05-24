@@ -46,15 +46,16 @@ export default class TopicAdd extends React.Component {
           <button className={this.state.isAdding?'':'hide'} onClick={this.cancel.bind(this)}>Cancel</button>
         </div>
         <div className="inputs">
-          <div className={this.state.isAdding?'input-group':'hide'}>
+          <div className={this.state.isAdding?'input-group title':'hide'}>
             <input type="text" valueLink={this.linkState('title')} required/>
             <span className="bar"></span>
             <label htmlFor="title">Title</label>
           </div>
 
-          <div className={this.state.isAdding?'':'hide'}>
+          <div className={this.state.isAdding?'input-group description':'hide'}>
+            <textarea name="description" valueLink={this.linkState('description')} required/>
+            <span className="bar"></span>
             <label htmlFor="description">Description</label>
-            <textarea name="description" valueLink={this.linkState('description')} className=""/>
           </div>
         </div>
       </div>
