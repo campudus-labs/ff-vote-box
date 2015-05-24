@@ -7,7 +7,7 @@
     "clean": "gulp clean",
     "dev": "gulp dev",
     "test": "gulp clean && gulp test",
-    "testWatch": "gulp clean && gulp testWatch"
+    "test:watch": "gulp clean && gulp test:watch"
   },
   "repository": {
     "type": "git",

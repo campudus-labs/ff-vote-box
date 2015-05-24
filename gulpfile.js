@@ -40,7 +40,8 @@ gulp.task('test:server:compile', ['build:server'], testBackendCompile);
 gulp.task('test:server', ['test:server:compile'], testServer);
 gulp.task('test:server:watch', ['test:server'], testBackendWatch);
 
-gulp.task('test', ['test:server:watch', 'test:frontend']);
+gulp.task('test', ['test:server', 'test:frontend']);
+gulp.task('test:watch', ['test:server:watch', 'test:frontend:watch']);
 
 gulp.task('default', ['build']);
 
@@ -102,7 +103,8 @@ function assetCopy() {
 function testFrontend(done) {
   karma.start({
     configFile : __dirname + '/karma.conf.js',
-    action : 'run',
+    autoWatch: false,
+    singleRun: true,
     proxies : {
       '/api' : 'http://localhost:8181'
     }
@@ -115,7 +117,8 @@ function testFrontendWatch(done) {
 
   karma.start({
     configFile : __dirname + '/karma.conf.js',
-    action : 'watch',
+    autoWatch: true,
+    singleRun: false,
     proxies : {
       '/api' : 'http://localhost:8181'
     }

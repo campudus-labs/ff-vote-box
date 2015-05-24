@@ -1,9 +1,11 @@
 import config from '../server/config';
+import fs from 'fs';
 
 describe('topics database', () => {
   let db = null;
 
   beforeEach(() => {
+    fs.unlinkSync('db-topics-test.json');
     config.topicsDb = 'db-topics-test.json';
     db = require('../server/topicsDb');
   });
