@@ -162,7 +162,7 @@ function backendServer() {
 
   nodemon({
     script : './dist/server/app.js',
-    watch : './dist/server/app.js'
+    watch : './dist/server/'
   });
 }
 

@@ -19,4 +19,9 @@ app.use(passport.session());
 app.use(authRouter);
 app.use(topicRouter);
 
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500);
+  res.send({message : err.message, error : err});
+});
+
 app.listen(8181);

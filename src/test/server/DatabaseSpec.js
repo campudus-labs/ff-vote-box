@@ -43,6 +43,37 @@ describe('topics database', () => {
     });
   });
 
+  it('needs a title for a topic', () => {
+    expect(() => {
+      // no title
+      db.createTopic();
+    }).toThrow();
+
+    expect(() => {
+      // still no title
+      db.createTopic(undefined, 'description');
+    }).toThrow();
+
+    expect(() => {
+      // still no title
+      db.createTopic(null, 'description');
+    }).toThrow();
+
+    expect(() => {
+      // still no title
+      db.createTopic('', 'description');
+    }).toThrow();
+
+    expect(() => {
+      // still no title
+      db.createTopic('   ', 'description');
+    }).toThrow();
+
+    expect(() => {
+      db.createTopic('title');
+    }).not.toThrow();
+  });
+
   it('should be possible to update a topic', () => {
     let topic = db.createTopic('hello', 'world');
     let title = 'hello2';

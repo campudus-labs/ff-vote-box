@@ -14,8 +14,12 @@ export default class Database {
   }
 
   createTopic(title, description) {
+    if (!(_.isString(title) && _.trim(title) !== '')) {
+      throw new Error('no title given');
+    }
+
     let topic = {
-      title : title,
+      title : _.trim(title),
       description : description
     };
 
