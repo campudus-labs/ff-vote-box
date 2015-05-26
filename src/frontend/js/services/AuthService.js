@@ -29,7 +29,7 @@ class AuthService {
 
   handleAuth(loginPromise) {
     return loginPromise
-      .then(function ({ username, id }) {
+      .then(({ username, id }) => {
         let user = {
           username,
           id
